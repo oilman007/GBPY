@@ -3,3 +3,10 @@
 # - 6 -> да
 # - 7 -> да
 # - 1 -> нет
+
+
+d = int(input('enter DOW '))
+if d <= 5:
+    print('it is workday')
+else:
+    print('it is weekend')
