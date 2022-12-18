@@ -12,5 +12,5 @@ y1 = float(input('enter y1 '))
 x2 = float(input('enter x2 '))
 y2 = float(input('enter y2 '))
 
-d = ((x1-x2)**2 + (y1-y2)**2)
+d = ((x1-x2)**2 + (y1-y2)**2)**0.5
 print(f'distance = {d}')
