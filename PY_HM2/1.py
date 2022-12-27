@@ -7,7 +7,7 @@ txt = input('enter value ')
 
 sum = 0
 for t in txt:
-    if t != ',' and t != '.':
+     if t.isdigit():
         sum += int(t)
 
 print(f'sum = {sum}')
