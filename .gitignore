@@ -6,7 +6,7 @@
 # my file
 venv/*.*
 pexelpro_bot/privacy.py
-
+*.exe
 
 # User-specific files
 *.rsuser
