@@ -1,33 +1,5 @@
-2023-02-03 07:52:49,920: INFO _welcome-362 Bot: pexelpro_bot [@pexelpro_bot]
-2023-02-03 07:52:49,921: INFO start_polling-358 Start polling.
-2023-02-03 07:52:52,324: INFO start_handler-92 user_id=835133011 user_bot=False user_message='/start'
-2023-02-03 07:53:42,106: ERROR default_exception_handler-1707 Task exception was never retrieved
-future: <Task finished name='Task-50' coro=<Dispatcher._process_polling_updates() done, defined at e:\git\py\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py:407> exception=MessageToDeleteNotFound('Message to delete not found')>
-Traceback (most recent call last):
-  File "e:\git\py\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 415, in _process_polling_updates
-    for responses in itertools.chain.from_iterable(await self.process_updates(updates, fast)):
-  File "e:\git\py\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 235, in process_updates
-    return await asyncio.gather(*tasks)
-  File "e:\git\py\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
-    response = await handler_obj.handler(*args, **partial_data)
-  File "e:\git\py\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 256, in process_update
-    return await self.message_handlers.notify(update.message)
-  File "e:\git\py\venv\lib\site-packages\aiogram\dispatcher\handler.py", line 117, in notify
-    response = await handler_obj.handler(*args, **partial_data)
-  File "e:/git/py/pexelpro_bot/main.py", line 218, in start_handler
-    await delete_msg(to_delete_msg)
-  File "e:/git/py/pexelpro_bot/main.py", line 192, in delete_msg
-    await bot.delete_message(message.chat.id, message.message_id)
-  File "e:\git\py\venv\lib\site-packages\aiogram\bot\bot.py", line 3274, in delete_message
-    return await self.request(api.Methods.DELETE_MESSAGE, payload)
-  File "e:\git\py\venv\lib\site-packages\aiogram\bot\base.py", line 236, in request
-    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
-  File "e:\git\py\venv\lib\site-packages\aiogram\bot\api.py", line 140, in make_request
-    return check_result(method, response.content_type, response.status, await response.text())
-  File "e:\git\py\venv\lib\site-packages\aiogram\bot\api.py", line 115, in check_result
-    exceptions.BadRequest.detect(description)
-  File "e:\git\py\venv\lib\site-packages\aiogram\utils\exceptions.py", line 140, in detect
-    raise err(cls.text or description)
-aiogram.utils.exceptions.MessageToDeleteNotFound: Message to delete not found
-2023-02-03 17:21:22,723: INFO stop_polling-433 Stop polling...
-2023-02-03 17:21:22,724: WARNING start_polling-329 Goodbye!
+2023-02-03 18:44:32,918: INFO _welcome-362 Bot: pexelpro_bot [@pexelpro_bot]
+2023-02-03 18:44:32,919: INFO start_polling-358 Start polling.
+2023-02-03 18:44:37,528: INFO start_handler-93 user_id=835133011 user_bot=False user_message='/start'
+2023-02-03 18:44:57,005: INFO stop_polling-433 Stop polling...
+2023-02-03 18:44:57,006: WARNING start_polling-329 Goodbye!

@@ -84,7 +84,7 @@ async def start_keyboard():
 # commands
 @dp.message_handler(commands=['start'])
 async def start_handler(message: types.Message):
-    global menu_msg
+    global menu_msg, record
     user_id = message.from_user.id
     user_name = message.from_user.first_name
     user_full_name = message.from_user.full_name
@@ -92,6 +92,7 @@ async def start_handler(message: types.Message):
     user_message = message.text
     logging.info(f'{user_id=} {user_bot=} {user_message=}')
     menu_msg = await message.reply(f"Hi, {user_full_name}!")
+    record.user = user_full_name
     #time.sleep(1)
     #btns = types.ReplyKeyboardMarkup(row_width=2)
     #btn_calc = types.KeyboardButton('/calculator')
@@ -169,7 +170,12 @@ async def callback_func(query):
         await edit_menu(query.message, request_menu(), keyboard)
     
     elif tag == tag_save:
-        # save 
+        # q = f"INSERT INTO records (id, user, subject, message, attachment, status) \
+        #     VALUES ({record.id},'{record.user}','{record.subject}','{record.message}','{', '.join(record.attachment)}','')";
+        # conn = sqlite3.connect('data.db')
+        # conn.execute(q)
+        # conn.commit()
+        # conn.close()
         await edit_menu(query.message, 'Which operation do you want to make?', await start_keyboard())
     
     elif tag == tag_exit:
@@ -234,23 +240,42 @@ if __name__ == '__main__':
 
 # https://www.tutorialspoint.com/sqlite/sqlite_python.htm
 
-conn = sqlite3.connect('data.db')
+#conn = sqlite3.connect('data.db')
 #conn.close()
 
-def get_requests(user):
-    cursor = conn.execute("SELECT id, user, subject, message, attachment, status from requests")
+def get_records(user):
+    conn = sqlite3.connect('data.db')
+    cursor = conn.execute("SELECT id, user, subject, message, attachment, status from records")
+    
     result = []
     for row in cursor:
         if row[1] == user:
             #               user, subject, text, files, status, id
             result.append(DBRecord(row[1],row[2],row[3],row[5].split(","),row[6],row[0]))
+    conn.close()
     return result
 
-def put_request(request: DBRecord):
-    conn.execute(f"INSERT INTO requests (id, user, subject, message, attachment, status) \
-                VALUES ({request.id},{request.user},{request.subject},{request.message},{', '.join(record.attachment)},{request.status}) )");
-    conn.commit()
 
+
+async def put_record(record: DBRecord):    
+
+    q = f"INSERT INTO records (id, user, subject, message, attachment, status) \
+            VALUES ({record.id},{record.user},{record.subject},{record.message},{', '.join(record.attachment)},"") )"
+
+    await menu_msg.reply(q)
+
+
+    conn = sqlite3.connect('data.db')
+
+    conn.execute(f"INSERT INTO records (id, user, subject, message, attachment, status) \
+                VALUES ({record.id},{record.user},{record.subject},{record.message},{', '.join(record.attachment)},"") )");
+    conn.commit()
+    conn.close()
+
+
+async def save_record(record: DBRecord):    
+    record.id = 1
+    await put_record(record)
 
 
 
