@@ -36,7 +36,7 @@ tag = ''
 #cur_query = None
 menu_msg = None
 to_delete_msg = None
-
+conn = sqlite3.Connection
 
 
 # menu
@@ -84,7 +84,9 @@ async def start_keyboard():
 # commands
 @dp.message_handler(commands=['start'])
 async def start_handler(message: types.Message):
-    global menu_msg, record
+    global menu_msg, record,conn
+    conn = sqlite3.connect('E:\git\py\pexelpro_bot\data.db')
+
     user_id = message.from_user.id
     user_name = message.from_user.first_name
     user_full_name = message.from_user.full_name
@@ -92,6 +94,11 @@ async def start_handler(message: types.Message):
     user_message = message.text
     logging.info(f'{user_id=} {user_bot=} {user_message=}')
     menu_msg = await message.reply(f"Hi, {user_full_name}!")
+
+    await message.reply(f"user_name, {user_name}!")
+    await message.reply(f"user_id, {user_id}!")
+    await message.reply(f"username, {message.from_user.username}!")
+
     record.user = user_full_name
     #time.sleep(1)
     #btns = types.ReplyKeyboardMarkup(row_width=2)
@@ -127,7 +134,7 @@ tag_to_start = "13"
 @dp.callback_query_handler(lambda c: True)
 async def callback_func(query):
 
-    global tag, to_delete_msg, menu_msg, record
+    global tag, to_delete_msg, menu_msg, record, conn
     #cur_query = query
     tag = query.data   
     #menu_msg = query.message     
@@ -170,16 +177,22 @@ async def callback_func(query):
         await edit_menu(query.message, request_menu(), keyboard)
     
     elif tag == tag_save:
-        # q = f"INSERT INTO records (id, user, subject, message, attachment, status) \
-        #     VALUES ({record.id},'{record.user}','{record.subject}','{record.message}','{', '.join(record.attachment)}','')";
-        # conn = sqlite3.connect('data.db')
-        # conn.execute(q)
-        # conn.commit()
-        # conn.close()
+        q = f"INSERT INTO records (id, user, subject, message, attachment, status) \
+            VALUES ({record.id},'{record.user}','{record.subject}','{record.message}','{', '.join(record.attachment)}','')";
+
+        conn.execute(q)
+        
+        
+        #conn = sqlite3.connect('E:\git\py\pexelpro_bot\data.db')
+        #conn.execute("INSERT INTO RECORDS (id, user, subject, message, attachment, status)             VALUES (0,'Artur','1','2','','')")
+
+        conn.commit()
+        #conn.close()
         await edit_menu(query.message, 'Which operation do you want to make?', await start_keyboard())
     
     elif tag == tag_exit:
         await edit_menu(query.message, 'Goodbye! See you...', None)
+        conn.close()
 
     elif tag == tag_to_start:
         await edit_menu(query.message, 'Which operation do you want to make?', await start_keyboard())
@@ -278,6 +291,19 @@ async def save_record(record: DBRecord):
     await put_record(record)
 
 
+
+async def create_user_table_if_not_exist(id):    
+    q = f'''CREATE TABLE IF NOT EXISTS "{id}" (
+	"id"	INTEGER NOT NULL UNIQUE,
+	"subject"	TEXT,
+	"message"	TEXT,
+	"attachment"	TEXT,
+	"status"	INTEGER,
+	"comment"	TEXT,
+	PRIMARY KEY("id" AUTOINCREMENT)
+    );'''
+    conn.execute(q)
+    conn.commit()
 
 
 # trash
